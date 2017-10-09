@@ -1,0 +1,228 @@
+/* Main wrapper */
+.divMasterDetailWrapper
+{
+    width: 100%;
+    height: 600px;
+    padding: 0px;
+    margin-top:-20px;
+    /* background-color: #E0E0E0; */
+}
+/* Container Bovenste Nationaal Archief logo */
+.divFlag
+{
+    width: 100%;
+    height: 90px;
+}
+/* Container Onderste Nationaal Archief logo */
+.divBottomFlag
+{
+    width: 100%;
+    height: 50px;
+    margin-bottom:-20px;
+}
+.divMasterView
+{
+    width: 400px;
+    height: 620px;
+    margin-right: 5px;
+    float: left;
+}
+.divControleBoard
+{
+    width: 400px;
+    height: 600px;
+    /*border: 1px solid Black;*/
+    margin-right: 5px;
+    overflow-y: auto;
+    float: left;
+    box-shadow: 1px 0px 2px 1px;
+}
+
+.divSlider{
+ width: 350px;
+ height: 60px;
+ padding: 20px
+}
+.divUserView
+{
+    width: 100%;
+    height: 150px;
+    background: #FFFFFF;
+    padding: 5px;
+    font-family: verdana;
+    border: 1px solid Black;
+    box-shadow: 0px 0px 2px 1px;
+    margin-right: 5px;
+    float: left;
+}
+
+
+
+.divDetailView
+{
+    height: 650px;
+    padding: 0;
+    display: block;
+    overflow-y: auto;
+}
+.row_evaluation
+{
+    margin-left: 50px;
+}
+.row_container
+{
+    height: 280px;
+    display: block;
+    margin-top: 25px;
+}
+.row_emails
+{
+    margin-left: 50px;
+    height: 300px;
+    width: 1000px;
+    display: block;
+    margin-top: 10px;
+    overflow-y: auto;
+    box-shadow: 0px 0px 2px 1px;
+}
+.row_emails_plots
+{
+    height: 200px;
+    width: 900px;
+    display: block;
+    margin-left: 50px;
+    margin-top: 30px;
+}
+.container_emails
+{
+    height: 300px;
+    width: 100%;
+    display: block;
+    padding: 5px;
+    margin-left: 5px;
+    /* border: 1px solid Black; */
+
+     overflow-y: auto;
+    float: left;
+
+}
+.container_plot_email
+{
+    height: 200px;
+    width: 600px;
+    display: block;
+    padding: 5px;
+    margin-left: 50px;
+    margin-top: -30px;
+    /*border: 1px solid Black; */
+    /* box-shadow: 0px 0px 2px 1px; */
+    /* overflow-y: auto; */
+    float: left;
+
+}
+.imageEFeatureImp { position: relative; top: -10px; }
+.imageEPie { position: relative; top: -10px; }
+
+
+.container_plot_prob
+{
+    height: 200px;
+    width: 200px;
+    display: block;
+    padding: 5px;
+    margin-left: 10px;
+    margin-top: -30px;
+    /*border: 1px solid Black; */
+    /* box-shadow: 0px 0px 2px 1px; */
+    /* overflow-y: auto; */
+    float: left;
+
+}
+.container_plot
+{
+    height: 280px;
+    width: 400px;
+    margin-top: 15px;
+    margin-left: 50px;
+    padding: 5px;
+    /* border: 1px solid Black; */
+    display: block;
+     box-shadow: 1px 1px 2px 1px;
+
+    float: left;
+}
+.imagePie { position: relative; top: -40px;left: -10px; }
+.imageWc { position: relative; top: +5px; }
+.imageCm { position: relative; top: +20px; }
+.imageRoc { position: relative; top: -10px;left: +50px; }
+
+
+
+
+/* Style the tab */
+div.tab {
+    overflow: hidden;
+   /* border: 1px solid #ccc;*/
+    background-color: #ffffff;
+ /*   background-color: #f1f1f1; */
+  text-align: center;
+}
+
+/* Style the buttons inside the tab */
+div.tab button {
+    background-color: #f1f1f1; /*inherit;*/
+    float: center;
+    border: none;
+    /*outline: none;*/
+    cursor: pointer;
+    padding: 10px 30px;
+    border-top-right-radius: 150px 170px;
+    border-top-left-radius: 150px 170px;
+    align: center;
+    margin: 0px -5px 0;
+    border: 1px solid #ccc;
+
+    transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+div.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+div.tab button.active {
+    background-color: #ccc;
+}
+
+
+/*.container_ROC
+{
+    height: 300px;
+    width: 400px;
+    margin-top: 25px;
+    margin-left: 50px;
+    padding: 5px;
+    display: block;
+    overflow-y: auto;
+    float: left;
+      */
+    /* border: 1px solid Black; */
+
+    /* box-shadow: 0px 0px 2px 1px; */
+
+/*}*/
+/*
+.container_CM
+{
+    height: 280px;
+    width: 400px;
+    display: block;
+    padding: 5px;
+    margin-left: 50px; */
+    /* border: 1px solid Black; */
+    /* box-shadow: 0px 0px 2px 1px; */
+    /* overflow-y: auto; */
+/*    float: left;
+
+}*/

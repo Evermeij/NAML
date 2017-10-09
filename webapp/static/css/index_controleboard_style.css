@@ -1,0 +1,122 @@
+/* Main wrapper */
+.divMasterDetailWrapper
+{
+    width: 100%;
+    height: 600px;
+    padding: 0px;
+    margin-top:-20px;
+}
+/* Container Bovenste Nationaal Archief logo */
+.divFlag
+{
+    width: 100%;
+    height: 90px;
+}
+/* Container Onderste Nationaal Archief logo */
+.divBottomFlag
+{
+    width: 100%;
+    height: 50px;
+    margin-bottom:-20px;
+}
+.divMasterView
+{
+    width: 400px;
+    height: 650px;
+   /*  background-color: #E0E0E0; */
+    /*border: 1px solid Black;*/
+    margin-right: 5px;
+    overflow-y: auto;
+    float: left;
+}
+.divUserView
+{
+    width: 100%;
+    height: 150px;
+    background: #FFFFFF;
+    padding: 5px;
+    font-family: verdana;
+    border: 1px solid Black;
+    box-shadow: 0px 0px 2px 1px;
+    margin-right: 5px;
+    float: left;
+}
+
+
+
+.divDetailView
+{
+    height: 650px;
+    padding: 0;
+    display: block;
+    overflow-y: auto;
+}
+.divEmail_header
+{
+    height: 200px;
+    display: block;
+    padding: 5px;
+    border: 1px solid Black;
+    box-shadow: 0px 0px 2px 1px;
+
+}
+.divKeys
+{
+    width: 200px;
+    overflow-y: auto;
+    float: left;
+}
+.divValues
+{
+    margin-right: 5px;
+    padding: 0;
+    display: block;
+    overflow-y: auto;
+}
+.divEmail_body
+{
+    height: 400px;
+    margin-top: 25px;
+    padding: 5px;
+    border: 1px solid Black;
+    display: block;
+    box-shadow: 0px 0px 2px 1px;
+    overflow-y: auto;
+}
+
+
+/* Style the tab */
+div.tab {
+    overflow: hidden;
+   /* border: 1px solid #ccc;*/
+    background-color: #ffffff;
+ /*   background-color: #f1f1f1; */
+  text-align: center;
+}
+
+/* Style the buttons inside the tab */
+div.tab button {
+    background-color: #f1f1f1; /*inherit;*/
+    float: center;
+    border: none;
+    /*outline: none;*/
+    cursor: pointer;
+    padding: 10px 30px;
+    border-top-right-radius: 150px 170px;
+    border-top-left-radius: 150px 170px;
+    align: center;
+    margin: 0px -5px 0;
+    border: 1px solid #ccc;
+
+    transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+div.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+div.tab button.active {
+    background-color: #ccc;
+}

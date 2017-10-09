@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<script src="/static/js/jquery.min.js" xmlns:margin-top="http://www.w3.org/1999/xhtml"
+        xmlns:margin-top="http://www.w3.org/1999/xhtml" xmlns:margin-top="http://www.w3.org/1999/xhtml"></script>
+<script src="/static/js/angular.js"></script>
+<script src="/static/js/angular-sanitize.js"></script>
+<script src="/static/js/ng-infinite-scroll.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/node_modules/angularjs-slider/dist/rzslider.css"/>
+<script src="/static/node_modules/angularjs-slider/dist/rzslider.min.js"></script>
+<script src="/static/js/controller.js"></script>
+
+
+<link rel="stylesheet" href="/static/css/index_style.css">
+
+
+<head>
+<title>Nationaal Archief Email Prototype.</title>
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+</head>
+
+<body>
+<div ng-app="myApp" class="divMasterDetailWrapper" ng-controller="EmailController" >
+    <div class="divFlag">
+        <p style="text-align:center;" ><IMG SRC="/static/Images/nationaal_archief_top.png" WIDTH=498px HEIGHT=87px> </p>
+    </div>
+    <div class="divMasterView" >
+        <div class="tab">
+            <a href="/logout"><button class="tablinks" >Log Out</button></a>
+            <a href="/global_performances/"><button class="tablinks" >Model</button></a>
+            <a href="/controleboard/"><button class="tablinks" >List</button></a>
+            <a href="/emails/"><button class="tablinks" >Email </button></a>
+        </div>
+    <div class="divControleBoard" >
+                <span  class="nullable">
+              <label>
+                <b>Model:   </b><select ng-model="current_model_choice" ng-options="modelChoice.name for modelChoice in modelChoices" ng-change="change_model(current_model_choice)">
+                </select>
+             </label> <button ng-click= "reset()">Reset</button></span><br/>
+        <div ng-repeat="mail in availableEmails" class="ng-class: divUserView" ng-mouseover="onMouseOver(mail)">
+           <h4>Email</h4>
+            <p><b> {{mail.from}} </b> </p>
+            <p><b> {{mail.date}} </b> </p>
+            <p>{{mail.subject}} </p>
+
+        </div>
+    </div>
+    </div>
+    <div class="divDetailView">
+        <div class="row_evaluation">
+                <p><b><span style="color:{{pred_color}}">Prediction: {{pred}} </span> &emsp; &emsp; <span style="color:{{truth_color}}"> Truth: {{truth}}  </span> </b> </p>
+        </div>
+        <div class="row_emails">
+
+            <div class="container_emails">
+                <p ng-bind-html="uCanTrust(emailHTML)"  font-family="sans-serif"></p>
+            </div>
+        </div>
+        <div class="row_emails_plots">
+            <div class="container_plot_prob">
+                <p><b>Probability of Prediction :</b></p>
+                 <p style="text-align:center;"> <img ng-src="{{epie_image}}" class="imageEPie"/>  </p>
+            </div>
+            <div class="container_plot_email">
+                <p><b>Feature Importance :</b></p>
+                 <p style="text-align:center;"> <img ng-src="{{eFimp_image}}" class="imageEFeatureImp" />  </p>
+            </div>
+
+        </div>
+    </div>
+    <div class="divBottomFlag">
+        <p style="text-align:center;" ><IMG SRC="/static/Images/nationaal_archief_bottom.png"> </p>
+    </div>
+</div>
+</body>

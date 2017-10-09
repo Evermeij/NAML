@@ -1,0 +1,15 @@
+{% block content %}
+    <div class="container">
+
+      <form class="form-signin" method="POST" action="/">
+        <h2 class="form-signin-heading">Please sign in</h2>
+    {{ form.hidden_tag() }}
+      <p><b>username</b></p>
+    <p>{{ form.username }}</p>
+      <p><b>password</b></p>
+    <p>{{ form.password }}</p>
+    <button class=button" type="submit">Log In</button>
+      </form>
+
+    </div> <!-- /container -->
+{% endblock %}

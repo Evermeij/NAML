@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/angular.js"></script>
+<script src="/static/js/angular-sanitize.js"></script>
+<script src="/static/js/ng-infinite-scroll.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/node_modules/angularjs-slider/dist/rzslider.css"/>
+<script src="/static/node_modules/angularjs-slider/dist/rzslider.min.js"></script>
+<script src="/static/js/controller.js"></script>
+
+
+<link rel="stylesheet" href="/static/css/index_style.css">
+
+
+<head>
+<title>Nationaal Archief Email Prototype.</title>
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+</head>
+
+<body>
+<div ng-app="myApp" class="divMasterDetailWrapper" ng-controller="SliderController as vm" >
+    <div class="divFlag">
+        <p style="text-align:center;" ><IMG SRC="/static/Images/nationaal_archief_top.png" WIDTH=498px HEIGHT=87px> </p>
+    </div>
+    <div class="divMasterView" >
+        <div class="tab">
+            <a href="/logout"><button class="tablinks" >Log Out</button></a>
+            <a href="/controleboard/"><button class="tablinks" >List</button></a>
+            <a href="/emails/"><button class="tablinks" >Email </button></a>
+            <a href="/global_performances/"><button class="tablinks" >Model</button></a>
+        </div>
+    <div class="divControleBoard" >
+         <div class="divSlider">
+             <span  class="nullable">
+                <p>
+                    <b>Auto Recalibration:</b>
+                    <button ng-click= "trainModel()">Train</button>
+                </p>
+                 <p>   <b>Model:</b>
+                  <label>
+                    <select ng-model="current_model_choice" ng-options="modelChoice.name for modelChoice in modelChoices" ng-change="change_model(current_model_choice)">
+                    </select>
+                 </label></span><br/>
+             </p>
+        </div>
+
+        <div class="divSlider">
+            <p><b>Manual Recalibration: </b></p>
+            <form ng-submit="testButton()" >
+                <p>Weight Taak:</p>
+                 <p>
+                <label>
+                   <input type="float" name="weight_taak" ng-model="val_weight_taak" required>
+                </label>
+                </p>
+                <p> Weight Non Taak:</p>
+                <p>
+                <label>
+                   <input type="float" name="weight_non_taak" ng-model="val_weight_non_taak" required>
+                </label>
+                </p>
+                <p>Threshold:</p>
+                <p>
+                <label>
+                   <input type="float" name="thres" ng-model="val_thres" required>
+                </label>
+                </p>
+            <p><input type=submit value=Train ></form></p>
+
+            <div>
+                <b>Upload New Files:</b>
+                <form method=post  action="/upload_emails/" enctype=multipart/form-data>
+                  <p><input type='file' name='file' multiple>
+                     <input type=submit value=Upload></p>
+                </form>
+                <button ng-click= "updateDatabase()">Update Database</button>
+            </div>
+        </div>
+
+
+    </div>
+    </div>
+    <div class="divDetailView">
+        <div class="row_container">
+            <div class="container_plot">
+                <p><b>Ratio Train versus Test:</b></p>
+                <img ng-src= "{{performance_images[current_model].pie}}"   class="imagePie"/>
+
+            </div>
+            <div class="container_plot">
+                <p><b>Wordcloud TAAK:</b></p>
+                 <img ng-src= "{{performance_images[current_model].wc}}"   class="imageWc"/>
+            </div>
+        </div>
+            <div class="container_plot">
+                <p><b>Confusion Matrix:</b></p>
+                 <img ng-src= "{{performance_images[current_model].cm}}"   class="imageCm"/>
+            </div>
+
+            <div class="container_plot">
+                <p><b>Receiver Operating Characteristic:</b></p>
+                 <img ng-src= "{{performance_images[current_model].roc}}"   class="imageRoc"/>
+            </div>
+
+    </div>
+    <div class="divBottomFlag">
+        <p style="text-align:center;" ><IMG SRC="/static/Images/nationaal_archief_bottom.png"> </p>
+    </div>
+</div>
+</body>

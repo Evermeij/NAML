@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="msgparser" default="all" basedir="."> 
+
+ <property name="src.dir" location="src"/>
+ <property name="classes" location="classes"/>
+ <property name="dist" location="dist"/>
+ <property name="jar" value="msgparser.jar"/>
+ <property name="docs" value="docs"/>
+ <property name="javadoc.dir" value="${docs}/javadoc"/>
+ 
+ 	
+ <path id="project.class.path">
+  <fileset dir="lib" includes="*.jar"/>
+  <pathelement path="classes"/>
+ </path>
+  
+ <target name="all" depends="dist" /> 
+
+ <target name="init">
+  <tstamp /> 
+ </target>
+  
+ <target name="clean" depends="init">
+  <delete dir="${classes}" /> 
+  <delete dir="${dist}" /> 
+ </target>
+  
+ <target name="compile" depends="clean">
+  <mkdir dir="${classes}" /> 
+  <javac debug="on" srcdir="${src.dir}" destdir="${classes}">
+   <include name="**/*.java"/>
+   <classpath refid="project.class.path"/>
+  </javac>
+ </target>
+
+ <target name="jar" description="generate the jar file" depends="compile">
+  <echo level="info">Generating ${jar}</echo>
+  <mkdir dir="${dist}" /> 
+  <jar jarfile="${dist}/${jar}" basedir="${classes}" />
+ </target>
+
+ <target name="dist" description="creates the package" depends="jar, javadoc">
+  <copy file="COPYING" todir="${dist}"/>
+  <copy file="README" todir="${dist}"/>
+  <copy todir="${dist}">
+   <fileset dir="${docs}">
+    <exclude name="**/.svn"/>
+   </fileset>
+  </copy>
+ </target>
+
+ <target name="javadoc">
+  <delete dir="${javadoc.dir}"/>
+  <mkdir dir="${javadoc.dir}"/>
+  <javadoc sourcepath="${src.dir}/main/java"
+           classpathref="project.class.path"
+           destdir="${javadoc.dir}"
+           additionalparam="-noqualifier java.*"
+           author="true"
+           version="true"
+           use="true"
+           windowtitle="msgparser (http://auxilii.com/msgparser/)">
+   <packageset dir="${src.dir}/main/java" defaultexcludes="yes">
+    <include name="com/auxilii/**"/>
+   </packageset>
+   <doctitle><![CDATA[<h1>msgparser<h1>]]></doctitle>
+   <bottom><![CDATA[<i>Copyright &#169; 2007 Roman Kurmanowytsch</i>]]></bottom>
+  </javadoc>
+ </target>
+
+</project>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/angular.js"></script>
+<script src="/static/js/angular-sanitize.js"></script>
+<script src="/static/js/ng-infinite-scroll.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/node_modules/angularjs-slider/dist/rzslider.css"/>
+<script src="/static/node_modules/angularjs-slider/dist/rzslider.min.js"></script>
+<script src="/static/js/controller.js"></script>
+
+<link rel="stylesheet" href="/static/css/index_controleboard_style.css">
+
+<div ng-app="myApp" ng-controller="DataController" class="divMasterDetailWrapper" >
+    <div class="divFlag">
+        <p style="text-align:center;" ><IMG SRC="/static/Images/nationaal_archief_top.png" WIDTH=498px HEIGHT=87px> </p>
+    </div>
+    <div class="divMasterView" >
+        <div class="tab">
+            <a href="/logout"><button class="tablinks" >Log Out</button></a>
+            <a href="/global_performances/"><button class="tablinks" >Model</button></a>
+            <a href="/emails/"><button class="tablinks" >Email </button></a>
+            <a href="/controleboard/"><button class="tablinks" >List</button></a>
+        </div>
+             <div ng-repeat="user in data" class="ng-class: divUserView" ng-mouseover="onMouseOver(user)">
+                       <h4> <span style="color: {{user.is_corrected}}">{{user.header_from}}</span> </h4>
+                            <p>
+                             <b> <span style="color: {{user.is_corrected}}">{{user.header_date}} </span> </b>  <span style="color: {{user.is_corrected}}">{{user.header_subject}} </span>
+                            </p>
+                            <p>
+
+                                <label> <span style="color: {{user.is_corrected}}"> Zakelijk:  </span>
+                                    <input type="checkbox" ng-model = "user.class0" ng-checked="user.class0" ng-change="onChangeClass0(user)" >
+                                </label>
+                                <label> <span style="color: {{user.is_corrected}}"> niet-Zakelijk:  </span>
+                                    <input type="checkbox"  ng-model = "user.class1" ng-checked="user.class1" ng-change="onChangeClass1(user)">
+                                </label>
+                                <button ng-click='onSubmit(user)'>Submit</button>
+                                <button ng-click='onDetails(user)'>Details</button>
+                            </p>
+
+             </div>
+
+    </div>
+    <div class="divDetailView">
+
+        <div class="divEmail_header">
+            <div class="divKeys">
+        <p>From:</p>
+        <p>Sent:</p>
+        <p>To:</p>
+        <p>Subject:</p>
+            </div>
+            <div class="divValues">
+                 <p> {{eFrom}} </p>
+                 <p>  {{eSent}} </p>
+                 <p>  {{eTo}}</p>
+                 <p>  {{eSubject}} </p>
+            </div>
+        </div>
+        <div class="divEmail_body">
+           <p>  {{eContent}} </p>
+        </div>
+    </div>
+    <div class="divBottomFlag">
+        <p style="text-align:center;" ><IMG SRC="/static/Images/nationaal_archief_bottom.png"> </p>
+    </div>
+</div>
