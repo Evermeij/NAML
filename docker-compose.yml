@@ -1,0 +1,49 @@
+#services:
+#server:
+#  restart: always
+#  image: nginx
+#  volumes:
+#    - ./server/conf.d:/etc/nginx/conf.d
+#    #- ./app/static:/app/static
+#  links:
+#    - web:web
+#  ports:
+#    - "5000:5000" #change to 80:80
+#japp:
+#  restart: always
+#  build: /app
+#  working_dir:
+#  command:
+
+db:
+    environment:
+      POSTGRES_DATABASE: naml
+      POSTGRES_PASSWORD: naml
+      POSTGRES_ROOT_PASSWORD: naml
+      POSTGRES_USER: naml
+    image: postgres
+
+phppgadmin:
+    environment:
+      POSTGRES_HOST: db
+    image: einfallstoll/phppgadmin
+    links:
+    - db:db
+    ports:
+    - 81:80
+
+web:
+  restart: always
+  build: ./
+  working_dir: /app
+  links:
+    - db:db
+#  expose:
+#    - "8000"
+  #extends:
+  #  file: docker-compose.base.yml
+  #  service: web
+  ports:
+    - "5000:5000"
+  command: python -u app.py
+  #command: gunicorn app:app -w 1 -b   0.0.0.0:5000 --name app --log-level=debug --log-file=- #-b   0.0.0.0:5000 or :8000
