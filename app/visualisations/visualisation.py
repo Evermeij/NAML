@@ -28,6 +28,8 @@ JS_PATH_ROCS = '/static/Images/rocs_NA/'
 JS_PATH_MODELS = '/static/Images/models_NA/'
 
 
+from machineLearning.config import PYTHON_PATH_USER_EMAIL_IMAGES,\
+                                   tokenize
 #--- LOCAL PATHS FOR CREATING/DELETING FIGURES FOR PYTHON CONTROLLER
 LOCALDIR = '/app'
 
@@ -37,9 +39,7 @@ PYTHON_PATH_PIES = LOCALDIR + JS_PATH_PIES
 PYTHON_PATH_ROCS = LOCALDIR + JS_PATH_ROCS
 PYTHON_PATH_MODELS = LOCALDIR + JS_PATH_MODELS
 
-PYTHON_PATH_USER_EMAIL_IMAGES = LOCALDIR+ '/static/Images/Emails/Users/'
 
-from machineLearning.config import tokenize
 
 from nltk.corpus import stopwords
 from nltk.stem.snowball import DutchStemmer

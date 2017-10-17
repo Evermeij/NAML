@@ -8,25 +8,17 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask import Flask, send_file, request, jsonify, render_template,redirect
 from werkzeug.utils import secure_filename
 
-import psycopg2
-
 import time
 import sys,os
-sys.path.append('app/')
-sys.path.append('database/')
+
+#sys.path.append('app/')
+#sys.path.append('database/')
 #sys.path.append('machine_learning/')
-sys.path.append('test/')
+#sys.path.append('test/')
 
-import model
-import model_properties
-import ml_model_v1 as ml
-
-from database.postgresDB import init_database
+from database.postgresDB import init_database, get_mails_of,update_mail_database,correct_predictions_from_input
+from machineLearning.config import load_filenames_images, get_Email_names
 from machineLearning.generation import generate_new_images_manual_fit,generate_new_images_auto_fit,add_new_email_images
-import psycopg2
-#import performance_tests as pt
-import subprocess
-#import update_dababase as database
 
 UPLOAD_FOLDER = 'java/emails/msg/'
 ALLOWED_EXTENSIONS = set(['msg'])
@@ -152,10 +144,11 @@ def index():
         print('Caught post request...')
         post_data = request.get_json()
         print(post_data)
-        model.correct_predictions_from_input(post_data['mail_id'],post_data['truth_class'] )
-        with open(localdir+'/static/data/corrections/corr.txt','a') as file:
-            file.write( str(post_data['mail_id']+' ; ' +str(post_data['truth_class'])) )
-            file.write('\n')
+
+        correct_predictions_from_input(post_data['mail_id'],post_data['truth_class'] )
+        # with open(localdir+'/static/data/corrections/corr.txt','a') as file:
+        #     file.write( str(post_data['mail_id']+' ; ' +str(post_data['truth_class'])) )
+        #     file.write('\n')
 
     return send_file("templates/index_controleboard.html")#,form=form )
 
@@ -203,14 +196,13 @@ def search_query():
     """
     View which is called whenever the '/s/' this url is requested
     """
-    return jsonify(model.get_mails_of(username=current_user.username,address=current_user.email))
+    return jsonify(get_mails_of(username=current_user.username,address=current_user.email))
 
 @app.route('/global_performances/',methods=['GET','POST'] )
 @login_required
 def index_performance():
     images = dict()
     images['pie'] = ''
-    form = model_properties.MNBInputForm(request.form)
     if request.method == 'POST':
         post_data = request.get_json()
 
@@ -243,7 +235,7 @@ def index_performance():
 @login_required
 def post_filenames():
 
-    filenames_dict = ml.load_filenames_images()
+    filenames_dict = load_filenames_images()
     return jsonify(filenames_dict)
 ########################################################################################################################
 
@@ -282,7 +274,7 @@ def post_emailnames():
                 with open(dir_path + directory + '/' + 'json_email_data_NA.txt', "w") as email_data_file:
                     email_data_file.write("{}")
 
-    return jsonify(model.get_Email_names(current_user.username))
+    return jsonify(get_Email_names(current_user.username))
 
 
 @app.route('/emails/',methods=['GET','POST'] )
@@ -318,8 +310,7 @@ def index_update_database():
         post_data = request.get_json()
         if 'message' in post_data.keys():
             if post_data['message'] == 'UPDATE_DATABASE':
-                model.update_mail_database(path_database=localdir +'/static/data/databases/', filename_database='database_NA_v1.db',
-                               path_mails='java/emails/processed/')
+                update_mail_database( path_mails='java/emails/processed/')
                 for filename in os.listdir('java/emails/processed/'):
                     if (filename.split('.')[1] == 'txt') or (filename.split('.')[1] == 'png'):
                         print('Deleting File: ' + str(filename))
@@ -333,7 +324,7 @@ def setup_logging():
     print('test')
     print('Create new table...')
     init_database()
-    #model.init_database()
+
     print('Done...')
     dbstatus = False
     while dbstatus == False:
@@ -346,8 +337,5 @@ def setup_logging():
     database_initialization_sequence()
 
 if __name__ == '__main__':
-    # print('Create new table...')
-    # model.init_database()
-    # print('Done...')
     app.run(debug = True, host='0.0.0.0')#,port=80)
     #app.run(host='0.0.0.0',port=80)

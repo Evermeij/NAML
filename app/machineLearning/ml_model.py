@@ -33,21 +33,26 @@ from visualisations.visualisation import PYTHON_PATH_CONFUSION_MATRIX , \
                                            PYTHON_PATH_ROCS, \
                                            PYTHON_PATH_MODELS
 from database.database import get_mail,loadEmailsTrainData
-from machineLearning.config import tokenize
+from machineLearning.config import  tokenize,\
+                                    PYTHON_PATH_JSON_INFO_EMAIL_IMAGES,\
+                                    PYTHON_FILENAME_JSON_INFO_EMAIL_IMAGES,\
+                                    PYTHON_PATH_THRESHOLD,\
+                                    PYTHON_FILENAME_THRESHOLD,\
+                                    LOCALDIR
 
 from machineLearning.base import BaseMLProject
 
 
 class MLProject(BaseMLProject):
-    LOCALDIR = '/app'
+    LOCALDIR = LOCALDIR
 
-    PYTHON_PATH_THRESHOLD = LOCALDIR + '/static/Images/'
-    PYTHON_FILENAME_THRESHOLD = 'thresholds.npy'
+    PYTHON_PATH_THRESHOLD = PYTHON_PATH_THRESHOLD
+    PYTHON_FILENAME_THRESHOLD = PYTHON_FILENAME_THRESHOLD
 
     PYTHON_PATH_MODELS = PYTHON_PATH_MODELS
 
-    PYTHON_PATH_JSON_INFO_EMAIL_IMAGES = LOCALDIR + '/static/Images/Emails/'
-    PYTHON_FILENAME_JSON_INFO_EMAIL_IMAGES = 'json_email_data_NA.txt'
+    PYTHON_PATH_JSON_INFO_EMAIL_IMAGES = PYTHON_PATH_JSON_INFO_EMAIL_IMAGES
+    PYTHON_FILENAME_JSON_INFO_EMAIL_IMAGES = PYTHON_FILENAME_JSON_INFO_EMAIL_IMAGES
 
     MODEL_DICTIONARY = {'mnb': MultinomialNB(fit_prior=False), 'rf': RandomForestClassifier(n_estimators=50),
                         'etr': ExtraTreesClassifier(n_estimators=50)}
@@ -247,17 +252,17 @@ class MLProject(BaseMLProject):
         return estimator
 
     def getJsonEmailData(self,user):
-        with open(self.PYTHON_PATH_JSON_INFO_EMAIL_IMAGES + "Users/" + user + '/' + self.PYTHON_FILENAME_JSON_INFO_EMAIL_IMAGES ,
+        with open(self.PYTHON_PATH_JSON_INFO_EMAIL_IMAGES  + user + '/' + self.PYTHON_FILENAME_JSON_INFO_EMAIL_IMAGES ,
                   'r') as outfile:
             json_email_data = json.load(outfile)
 
         return json_email_data
 
     def deleteJsonEmailData(self, user):
-        os.remove(self.PYTHON_PATH_JSON_INFO_EMAIL_IMAGES + "Users/" + user + '/' + self.PYTHON_FILENAME_JSON_INFO_EMAIL_IMAGES)
+        os.remove(self.PYTHON_PATH_JSON_INFO_EMAIL_IMAGES + user + '/' + self.PYTHON_FILENAME_JSON_INFO_EMAIL_IMAGES)
 
     def saveJsonEmailData(self, user,json_email_data):
-        with open( self.PYTHON_PATH_JSON_INFO_EMAIL_IMAGES + "Users/" + user + '/' + self.PYTHON_FILENAME_JSON_INFO_EMAIL_IMAGES, 'w') as outfile:
+        with open( self.PYTHON_PATH_JSON_INFO_EMAIL_IMAGES + user + '/' + self.PYTHON_FILENAME_JSON_INFO_EMAIL_IMAGES, 'w') as outfile:
             json.dump(json_email_data, outfile)
 
 
