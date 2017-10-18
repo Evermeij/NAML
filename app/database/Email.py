@@ -71,8 +71,8 @@ class Email(BaseEmail):
         email_data = (self.mail_id, str(self.date_sent), str(self.date_prediction), str(self.date_labelling),
                        str(self.date_conflict), self.from_email_address, self.to_email_address, self.subject,
                       (self.body.encode('ascii', errors='ignore')).decode('ascii'),
-                       self.truth_class, self.labelling_user, self.pred_class, self.pred_score, self.is_labelled,
-                       self.has_been_sent_back, self.is_in_conflict, self.model_hash, self.model_version)
+                       self.truth_class, self.labelling_user, self.pred_class, self.pred_score, int(self.is_labelled),
+                       int(self.has_been_sent_back), int(self.is_in_conflict), self.model_hash, self.model_version)
         # insert mail if mail id is not present
         sqlite_cursor.execute('''
                                 INSERT INTO TABLE_MAILS 

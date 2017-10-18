@@ -228,3 +228,4 @@ def update_predictions(update_dic):
                     WHERE mail_id = ?",(str(pred[0]),id))
     conn.commit()
     conn.close()
+

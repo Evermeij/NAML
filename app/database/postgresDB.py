@@ -84,8 +84,9 @@ def init_database():
                        model_version= rowEmail[17])
         try:
             email_obj.insert_email_in_db_postgres(cursorPostgres)
-        except:
+        except Exception as e:
             print('Could not transfer from sqlite3 to postgres...')
+            print(e)
             print( email_obj.mail_id )
             continue
 
@@ -196,24 +197,24 @@ def update_mail_database(path_mails):
     # Create table
     cursorPostgres.execute('''CREATE TABLE IF NOT EXISTS TABLE_MAILS
                  (
-                 mail_id TEXT, 
-                 date_sent TEXT, 
-                 date_prediction TEXT, 
-                 date_labelling TEXT, 
-                 date_conflict TEXT,
-                 from_email_address TEXT, 
-                 to_email_address TEXT,
-                 subject TEXT,
-                 body TEXT,
-                 truth_class TEXT,
-                 labelling_user TEXT,
-                 pred_class TEXT,
-                 pred_score REAL,
-                 is_labelled  BOOLEAN,
-                 has_been_sent_back BOOLEAN,
-                 is_in_conflict BOOLEAN,
-                 model_hash TEXT,
-                 model_version TEXT
+                 mail_id varchar, 
+                 date_sent varchar, 
+                 date_prediction varchar, 
+                 date_labelling varchar, 
+                 date_conflict varchar,
+                 from_email_address varchar, 
+                 to_email_address varchar,
+                 subject varchar,
+                 body varchar,
+                 truth_class varchar,
+                 labelling_user varchar,
+                 pred_class varchar,
+                 pred_score real,
+                 is_labelled  smallint,
+                 has_been_sent_back smallint,
+                 is_in_conflict smallint,
+                 model_hash varchar,
+                 model_version varchar
                  );''')
 
     for filename_mail in os.listdir(path_mails):
@@ -228,9 +229,9 @@ def update_mail_database(path_mails):
             email_obj = Email(mail_id=messageId_, date_sent=date_sent_, date_prediction=None, date_labelling=None,
                               date_conflict=None, from_email_address=from_, to_email_address=to_, subject=subject_,
                               body=body_, truth_class=None, labelling_user=None, pred_class=None, pred_score=None,
-                              is_labelled=False, has_been_sent_back=False, is_in_conflict=False, model_hash=None,
+                              is_labelled=0, has_been_sent_back=0, is_in_conflict=0, model_hash=None,
                               model_version=None)
-            email_obj.insert_email_in_db(cursorPostgres)
+            email_obj.insert_email_in_db_postgres(cursorPostgres)
 
     # Save the changes when done
     print('Commit changes to database...')
@@ -293,18 +294,11 @@ def get_mails_of(username, address, MAX_MAILS=20):
 def correct_predictions_from_input(mail_id, truth_class):
     connPostgres, cursorPostgres = openConnectionToPostgresDb()
 
-    print('truth class  before update...')
-    cursorPostgres.execute('SELECT mail_id, truth_class FROM TABLE_MAILS WHERE (mail_id=?)', [(mail_id)])
-    entry = cursorPostgres.fetchone()
-    print(entry)
-
     print('update truth class...')
     cursorPostgres.execute("UPDATE TABLE_MAILS\
-                        SET truth_class = ?,is_labelled=? \
-                        WHERE mail_id = ?", (truth_class, True, mail_id))
+                        SET truth_class = %s,is_labelled=%s \
+                        WHERE mail_id = %s", ( str(truth_class), 1, str(mail_id) ))
     connPostgres.commit()
 
-    cursorPostgres.execute('SELECT mail_id, truth_class,is_labelled FROM TABLE_MAILS WHERE (mail_id=?)', [(mail_id)])
-    entry = cursorPostgres.fetchone()
-    print(entry)
     closeConnectionToPostgresDb(connPostgres, cursorPostgres)
+

@@ -20,7 +20,7 @@ from database.postgresDB import init_database, get_mails_of,update_mail_database
 from machineLearning.config import load_filenames_images, get_Email_names
 from machineLearning.generation import generate_new_images_manual_fit,generate_new_images_auto_fit,add_new_email_images
 
-UPLOAD_FOLDER = 'java/emails/msg/'
+UPLOAD_FOLDER = '/emails/msg/'
 ALLOWED_EXTENSIONS = set(['msg'])
 
 app = Flask(__name__)
@@ -222,7 +222,6 @@ def index_performance():
             if (post_data['message'] == 'AUTO_TRAIN'):
                 print('Start Grid Search...')
                 generate_new_images_auto_fit(name_model=post_data['model_name'])
-                #subprocess.call(['python', os.getcwd() + '/../machine_learning/ml_model_v1.py'])
     if current_user.username == 'admin':
         return send_file("templates/index_global_performance_admin.html")
     else:
@@ -310,18 +309,17 @@ def index_update_database():
         post_data = request.get_json()
         if 'message' in post_data.keys():
             if post_data['message'] == 'UPDATE_DATABASE':
-                update_mail_database( path_mails='java/emails/processed/')
-                for filename in os.listdir('java/emails/processed/'):
+                update_mail_database( path_mails='/emails/processed/')
+                for filename in os.listdir('/emails/processed/'):
                     if (filename.split('.')[1] == 'txt') or (filename.split('.')[1] == 'png'):
                         print('Deleting File: ' + str(filename))
-                        os.remove('java/emails/processed/'+ filename)
+                        os.remove('/emails/processed/'+ filename)
     return redirect('/')
 
 #temporary solution for gunicorn compatibility
 # better solution in http://flask.pocoo.org/docs/0.12/tutorial/dbcon/
 @app.before_first_request
 def setup_logging():
-    print('test')
     print('Create new table...')
     init_database()
 
@@ -337,5 +335,5 @@ def setup_logging():
     database_initialization_sequence()
 
 if __name__ == '__main__':
-    app.run(debug = True, host='0.0.0.0')#,port=80)
+    app.run(debug = True, host='0.0.0.0',port=80)
     #app.run(host='0.0.0.0',port=80)
