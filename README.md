@@ -82,7 +82,7 @@ The automatic recalibration is a random grid-search with 10-iterations over 3 cr
 
 ## License
 
-This project is licensed under ?????
+This project is licensed under GPLv3. See license.md for further details.
 
 ## Acknowledgments
 
