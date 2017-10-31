@@ -25,13 +25,9 @@ docker-compose up
 
 * **Benoit Descamps** - *Initial work* - [github](https://github.com/benoitdescamps), benoitdescamps@hotmail.com
 
-<<<<<<< HEAD
 ## Background
 The goal of this project is the development of a demo-prototype to illustrate the inner-workings of a basic text-classification machine learning product.
 
-
-=======
->>>>>>> 9c85a6f4a60bdce677fe53064c716b9e90a620ba
 ## License
 
 ## Acknowledgments
@@ -40,7 +36,4 @@ The goal of this project is the development of a demo-prototype to illustrate th
 * [BigData Republic](https://www.bigdatarepublic.nl/)
 * ICTU
 * Discipl
-<<<<<<< HEAD
 
-=======
->>>>>>> 9c85a6f4a60bdce677fe53064c716b9e90a620ba
