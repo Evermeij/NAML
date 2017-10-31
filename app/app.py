@@ -16,15 +16,23 @@ import sys,os
 #sys.path.append('machine_learning/')
 #sys.path.append('test/')
 
-from database.postgresDB import init_database, get_mails_of,update_mail_database,correct_predictions_from_input
+from database.postgresDB import init_database,load_user_mails,update_user_mails,delete_user_mails,update_mail_database,correct_predictions_from_input
 from machineLearning.config import load_filenames_images, get_Email_names
-from machineLearning.generation import generate_new_images_manual_fit,generate_new_images_auto_fit,add_new_email_images
+from machineLearning.generation import generate_new_images_manual_fit,generate_new_images_auto_fit,add_new_email_images,update_predictions_db
+from machineLearning.config import censor_name,\
+                                   load_censored_words,\
+                                   reset__censored_words,\
+                                   update_censored_words
 
-UPLOAD_FOLDER = '/emails/msg/'
-ALLOWED_EXTENSIONS = set(['msg'])
+#UPLOAD_FOLDER = '/emails/msg/'
+UPLOAD_FOLDER_EML = '/emails/eml/'
+UPLOAD_FOLDER_MSG = '/emails/msg/'
+ALLOWED_EXTENSIONS = set(['msg','eml'])
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+#app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER_EML'] = UPLOAD_FOLDER_EML
+app.config['UPLOAD_FOLDER_MSG'] = UPLOAD_FOLDER_MSG
 
 app.config['SECRET_KEY'] = 'bigdatarepublic@secretkey2017'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////database.db'
@@ -149,8 +157,11 @@ def index():
         # with open(localdir+'/static/data/corrections/corr.txt','a') as file:
         #     file.write( str(post_data['mail_id']+' ; ' +str(post_data['truth_class'])) )
         #     file.write('\n')
+    if current_user.username == 'admin':
+        return send_file("templates//index_controleboard_admin.html")
+    else:
+        return send_file("templates/index_controleboard.html")
 
-    return send_file("templates/index_controleboard.html")#,form=form )
 
 
 @app.route('/signup/', methods=['GET', 'POST'])
@@ -196,7 +207,7 @@ def search_query():
     """
     View which is called whenever the '/s/' this url is requested
     """
-    return jsonify(get_mails_of(username=current_user.username,address=current_user.email))
+    return jsonify(load_user_mails(username=current_user.username,address=current_user.email))
 
 @app.route('/global_performances/',methods=['GET','POST'] )
 @login_required
@@ -284,6 +295,7 @@ def index_emails():
 @app.route('/logout')
 @login_required
 def logout():
+    delete_user_mails(current_user.username)
     logout_user()
     return redirect('/')
 
@@ -298,8 +310,14 @@ def index_upload_emails():
             uploaded_files = request.files.getlist("file")
             for file in uploaded_files:
                 if file and allowed_file(file.filename):
+                    extension = file.filename.split('.')[-1]
+                    print('filename: '+str(file.filename))
+                    print('extension: '+str(extension))
                     filename = secure_filename(file.filename)
-                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    if (extension == 'eml'):
+                        file.save(os.path.join(app.config['UPLOAD_FOLDER_EML'], filename))
+                    if (extension == 'msg'):
+                        file.save(os.path.join(app.config['UPLOAD_FOLDER_MSG'], filename))
     return redirect('/global_performances/')
 
 @app.route('/update_database/',methods=['GET','POST'] )
@@ -315,6 +333,48 @@ def index_update_database():
                         print('Deleting File: ' + str(filename))
                         os.remove('/emails/processed/'+ filename)
     return redirect('/')
+
+@app.route('/update_predictions/',methods=['GET','POST'] )
+@login_required
+def index_update_predictions():
+    if request.method == 'POST':
+        post_data = request.get_json()
+        if 'message' in post_data.keys():
+            if (post_data['message'] == 'UPDATE_PREDICTIONS'):
+                print('UPDATE_PREDICTIONS')
+                name_model = post_data['model_name']
+                update_predictions_db(name_model)
+
+    return redirect('/')
+
+@app.route('/censored/',methods=['GET','POST'] )
+@login_required
+def index_update_censored():
+    if request.method == 'POST':
+        post_data = request.get_json()
+        if 'message' in post_data.keys():
+            if (post_data['message'] == 'UPDATE_CENSORED_WORDS'):
+                print('UPDATE_CENSORED_WORDS')
+                new_censored_words = post_data['words']
+                list_new_censored = list( map( lambda x: x.replace(' ',''), new_censored_words.split(';')))
+                update_censored_words(list_new_censored)
+            if (post_data['message'] == 'RESET_CENSORED_WORDS'):
+                print('RESET_CENSORED_WORDS')
+                reset__censored_words()
+
+    return redirect('/')
+
+@app.route('/refresh/',methods=['GET','POST'] )
+@login_required
+def index_refresh_list():
+    if request.method == 'POST':
+        post_data = request.get_json()
+        if 'message' in post_data.keys():
+            if (post_data['message'] == 'REFRESH_LIST'):
+                update_user_mails(username=current_user.username,address=current_user.email)
+
+    return redirect('/')
+
 
 #temporary solution for gunicorn compatibility
 # better solution in http://flask.pocoo.org/docs/0.12/tutorial/dbcon/
@@ -335,5 +395,5 @@ def setup_logging():
     database_initialization_sequence()
 
 if __name__ == '__main__':
-    app.run(debug = True, host='0.0.0.0',port=80)
+    app.run(debug = True, host='0.0.0.0')#,port=80) #add port for discipl
     #app.run(host='0.0.0.0',port=80)

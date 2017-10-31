@@ -1,14 +1,4 @@
-#services:
-#server:
-#  restart: always
-#  image: nginx
-##  volumes:
-##    - ./server/conf.d:/etc/nginx/conf.d
-##    #- ./app/static:/app/static
-#  links:
-#    - web:web
-#  ports:
-#    - "5000:5000" #change to 80:80
+#gninx is unnecessary here
 japp:
   restart: always
   build: ./ReadEmail
@@ -36,17 +26,15 @@ phppgadmin:
     - 81:80
 
 web:
-  restart: always
-  build: ./
-  working_dir: /app
-  volumes:
-  - ./emails/eml:/emails/eml
-  - ./emails/msg:/emails/msg
-  - ./emails/processed:/emails/processed
-  links:
+    restart: always
+    build: ./
+    working_dir: /app
+    volumes:
+    - ./emails/eml:/emails/eml
+    - ./emails/msg:/emails/msg
+    - ./emails/processed:/emails/processed
+    links:
     - db:db
-#  ports:
-#    - "5000:5000"
-#  #command: python -u app.py
-#  command: gunicorn app:app -w 4 -b  0.0.0.0:5000 --name app --log-level=debug --log-file=- #-b   0.0.0.0:5000 or :8000
-
+    ports:
+    - "5000:5000"
+    #command: gunicorn app:app -w 4 -b  0.0.0.0:5000 --name app --log-level=debug --log-file=-

@@ -76,12 +76,52 @@
 .divEmail_body
 {
     height: 400px;
-    margin-top: 25px;
+    margin-top: 5px;
     padding: 5px;
     border: 1px solid Black;
     display: block;
     box-shadow: 0px 0px 2px 1px;
     overflow-y: auto;
+}
+.divEmail_body_admin
+{
+    height: 300px;
+    margin-top: 5px;
+    padding: 5px;
+    border: 1px solid Black;
+    display: block;
+    box-shadow: 0px 0px 2px 1px;
+    overflow-y: auto;
+}
+
+.divEmail_body_censor
+{
+    height: 70px;
+    margin-top: 5px;
+    padding: 5px;
+    border: 1px solid Black;
+    display: block;
+    box-shadow: 0px 0px 2px 1px;
+    overflow-y: auto;
+}
+textarea {
+  height:50px;
+  color:#999;
+  font-weight:400;
+  font-size:15px;
+  font-family:'Ubuntu', Helvetica, Arial, sans-serif;
+  width:100%;
+  background:#fff;
+  border-radius:3px;
+  line-height:2em;
+  border:none;
+  box-shadow:0px 0px 5px 1px rgba(0,0,0,0.1);
+  padding:5px;
+  -webkit-transition: height 2s ease;
+-moz-transition: height 2s ease;
+-ms-transition: height 2s ease;
+-o-transition: height 2s ease;
+transition: height 2s ease;
 }
 
 

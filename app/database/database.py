@@ -17,11 +17,28 @@ from database.Email import Email
 '''
 
 def get_string_between(start, end, email):
+    '''
+    Helper Function for extraction data from the processed .txt files
+    Example:
+        get_string_between('__Subject__ :', '__From__ : ', email)
+    '''
     if end == None:
         return email[email.find(start) + len(start)::]
     return email[email.find(start) + len(start):email.rfind(end)]
 
 def extract_mail_properties(path, filename):
+    '''
+    Extracts email properties from the processed .txt file.
+    The Files have Format:
+    "
+    __Subject__ : ...
+    __From__ : ...
+    __To__ : ...
+    __Date__ : ... (format: %Y-%m-%d %H:%M:%S)
+    __MessageId__ : ...
+    __Body__ : ...
+    "
+    '''
     try:
         with open(path + filename) as file:
             email = file.read()
@@ -208,13 +225,13 @@ def loadEmailsTrainData():
     return df
 
 #--- update prediction given some model
-def get_new_predictions(ml_model):
+def get_new_predictions(ml_model,threshold=0.5):
     update_dic = dict()
     conn = sqlite3.connect(PYTHON_PATH_DATABASE + PYTHON_FILENAME_DATABASE)
     c = conn.cursor()
     c.execute('SELECT mail_id,body FROM TABLE_MAILS ')
     for x in c:
-        ypred = ml_model.predict(np.array([x[1]]))
+        ypred = int(ml_model.predict_proba(np.array([x[1]]))[0,0]<threshold)
         update_dic.update({str(x[0]):ypred})
     conn.close()
     return update_dic
@@ -225,7 +242,7 @@ def update_predictions(update_dic):
     for id,pred in update_dic.items():
         c.execute("UPDATE TABLE_MAILS\
                     SET pred_class = ?\
-                    WHERE mail_id = ?",(str(pred[0]),id))
+                    WHERE mail_id = ?",(str(pred),id))
     conn.commit()
     conn.close()
 

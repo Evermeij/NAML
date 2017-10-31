@@ -32,7 +32,7 @@ from visualisations.visualisation import PYTHON_PATH_CONFUSION_MATRIX , \
                                            PYTHON_PATH_PIES, \
                                            PYTHON_PATH_ROCS, \
                                            PYTHON_PATH_MODELS
-from database.database import get_mail,loadEmailsTrainData
+from database.postgresDB import get_mail,loadEmailsTrainData
 from machineLearning.config import  tokenize,\
                                     PYTHON_PATH_JSON_INFO_EMAIL_IMAGES,\
                                     PYTHON_FILENAME_JSON_INFO_EMAIL_IMAGES,\
@@ -242,14 +242,17 @@ class MLProject(BaseMLProject):
         return word_list
 
     def loadBestEstimator(self,name_model):
+        filename_model = ''
         for filename in os.listdir(PYTHON_PATH_MODELS + name_model + '/'):
             if (filename.split('.')[1] == 'pkl'):
                 filename_model = filename
                 break
-
-        with open(PYTHON_PATH_MODELS + name_model + '/' + filename_model, 'rb') as fid:
-            estimator = pickle.load(fid)
-        return estimator
+        if filename_model == '':
+            return None
+        else:
+            with open(PYTHON_PATH_MODELS + name_model + '/' + filename_model, 'rb') as fid:
+                estimator = pickle.load(fid)
+            return estimator
 
     def getJsonEmailData(self,user):
         with open(self.PYTHON_PATH_JSON_INFO_EMAIL_IMAGES  + user + '/' + self.PYTHON_FILENAME_JSON_INFO_EMAIL_IMAGES ,

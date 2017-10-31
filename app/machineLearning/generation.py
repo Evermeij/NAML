@@ -27,6 +27,11 @@ from machineLearning.config import PYTHON_PATH_INFO_IMAGES,\
                     clean_file,\
                     load_filenames_images
 
+from machineLearning.config import censor_name,\
+                                   load_censored_words,\
+                                   reset__censored_words,\
+                                   update_censored_words
+
 from machineLearning.ml_model import MLProject
 
 def generate_new_images_manual_fit(name_model ='mnb',thres = 0.5,weight_taak = 0.5,weight_non_taak =0.49):
@@ -130,7 +135,7 @@ def generate_new_images_auto_fit(name_model ='mnb'):
 
 
     print('Update predictions...')
-    update_dic = get_new_predictions(estimator)
+    update_dic = get_new_predictions(estimator,threshold=threshold_dic[name_model])
     update_predictions(update_dic)
     print('Predictions updated!')
 
@@ -138,6 +143,8 @@ def generate_new_images_auto_fit(name_model ='mnb'):
 
 
 def add_new_email_images(mail_id,user='Mette'):
+    censored_list = load_censored_words()
+
     currentProject = MLProject() #--- this part could be improved
 
     threshold_dic = currentProject.get_threshold_dic()
@@ -183,8 +190,8 @@ def add_new_email_images(mail_id,user='Mette'):
         email_data = {'pred': spam_ham_dic[str(y_pred)],
                         'truth': spam_ham_dic.get(target,'NONE'),
                         'date': date[0],
-                        'from': _from[0],
-                        'subject': shorten_word(subject[0]),
+                        'from': censor_name(_from[0],censored_list),
+                        'subject': shorten_word(censor_name(subject[0],censored_list)),
                         'html_body': html_body,
                         'eFimp': "/static/Images/Emails/Users/"+user+'/feature_importance_email_NA/' + name_model + '/' + "efeature_imp_" + extra_info + '.png',
                         'epie': "/static/Images/Emails/Users/" +user+'/pie_probability_NA/'+ name_model + '/' + "epie_prob_" + extra_info + '.png'}
@@ -197,3 +204,13 @@ def add_new_email_images(mail_id,user='Mette'):
     currentProject.deleteJsonEmailData(user)
     print('Create new file')
     currentProject.saveJsonEmailData(user, json_email_data)
+
+def update_predictions_db(name_model='mnb'):
+    currentProject = MLProject()  # --- this part could be improved
+    threshold_dic = currentProject.get_threshold_dic()
+    estimator = currentProject.loadBestEstimator(name_model)
+
+    print('Update predictions for model :'+str(name_model))
+    update_dic = get_new_predictions(estimator,threshold=threshold_dic[name_model])
+    update_predictions(update_dic)
+    print('Predictions updated!')

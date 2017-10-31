@@ -27,11 +27,15 @@ class Email(BaseEmail):
         self.model_version = model_version
 
     def insert_email_in_db(self, sqlite_cursor):
+        """
+        Insert email into sqlite database
+        -> will be removed
+        """
         email_data = [(self.mail_id, str(self.date_sent), str(self.date_prediction), str(self.date_labelling),
                        str(self.date_conflict), self.from_email_address, self.to_email_address, self.subject, self.body,
                        self.truth_class, self.labelling_user, self.pred_class, self.pred_score, self.is_labelled,
                        self.has_been_sent_back, self.is_in_conflict, self.model_hash, self.model_version)]
-        # insert mail if mail id is not present
+
         sqlite_cursor.execute('''
         SELECT
         mail_id,
@@ -68,12 +72,15 @@ class Email(BaseEmail):
             # user data? user_id? date of confirmed
             # def predict(model):
     def insert_email_in_db_postgres(self, sqlite_cursor):
+        """
+        Insert email into postgres database
+        """
+
         email_data = (self.mail_id, str(self.date_sent), str(self.date_prediction), str(self.date_labelling),
                        str(self.date_conflict), self.from_email_address, self.to_email_address, self.subject,
                       (self.body.encode('ascii', errors='ignore')).decode('ascii'),
                        self.truth_class, self.labelling_user, self.pred_class, self.pred_score, int(self.is_labelled),
                        int(self.has_been_sent_back), int(self.is_in_conflict), self.model_hash, self.model_version)
-        # insert mail if mail id is not present
         sqlite_cursor.execute('''
                                 INSERT INTO TABLE_MAILS 
                                 (
@@ -101,4 +108,4 @@ class Email(BaseEmail):
                                         %s,%s,%s,%s,%s,
                                         %s,%s,%s );
                                 '''
-                                  , email_data)
+                                  , (email_data) )

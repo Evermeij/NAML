@@ -7,6 +7,7 @@ package nl.ictu.experiment.email;
 
 import com.auxilii.msgparser.Message;
 import com.auxilii.msgparser.MsgParser;
+import com.auxilii.msgparser.RecipientEntry;
 
 import javax.mail.Address;
 import javax.mail.BodyPart;
@@ -17,6 +18,7 @@ import javax.mail.internet.MimeMultipart;
 import java.io.*;
 import java.nio.file.*;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Properties;
 
 //.msg part
@@ -57,11 +59,16 @@ public class ReadEmail {
     private String getTo(javax.mail.Message message) throws Exception{
         String to_addresses = "";
         Address[] recipients = message.getRecipients(javax.mail.Message.RecipientType.TO);
+        int counter = 0;
         for (Address address : recipients) {
-            System.out.println("To : " +  address.toString() );
-            to_addresses = to_addresses + " ," +address.toString();
-
+            if(counter == 0) {
+                to_addresses = address.toString();
+            }
+            else{
+                to_addresses = to_addresses + " ," +address.toString();
+            }
         }
+        System.out.println("To : " +  to_addresses);
         return to_addresses;
     }
 
@@ -103,6 +110,34 @@ public class ReadEmail {
     }
 
     // MSG sparsing code
+//    private String getAllEmailsRecipients( List<RecipientEntry> recipentsTo, List<RecipientEntry> recipentsCc, List<RecipientEntry> recipentsBcc) throws Exception{
+//        String to_addresses = "";
+//        Address[] recipients = message.getRecipients(javax.mail.Message.RecipientType.TO);
+//        for (Address address : recipients) {
+//            System.out.println("To : " +  address.toString() );
+//            to_addresses = to_addresses + " ," +address.toString();
+//
+//        }
+//        return to_addresses;
+    private String getTo(com.auxilii.msgparser.Message message) throws Exception{
+        String to_addresses = "";
+        int counter = 0;
+        List<RecipientEntry> recipients = message.getRecipients();
+        for (RecipientEntry recipent : recipients) {
+            if(counter == 0){
+                to_addresses =  recipent.getToEmail();
+            }
+            else{
+                to_addresses = to_addresses + " ," +recipent.getToEmail();
+            }
+            counter++;
+
+
+        }
+        System.out.println("To : " +  to_addresses );
+        return to_addresses;
+    }
+
     public void sparseMsg(String path, String msgFilename) throws Exception{
 
         File msgFile = new File(path + msgFilename);
@@ -112,11 +147,15 @@ public class ReadEmail {
         Message msg = msgp.parseMsg(msgFile);
 
         String fromEmail = msg.getFromEmail();
-        String toEmail = msg.getToEmail();
+        String toEmail = getTo(msg); //msg.getToEmail();
         String fromName = msg.getFromName();
         String toName = msg.getToName();
         String subject = msg.getSubject();
         String body = msg.getBodyText();
+
+        List<RecipientEntry> recipentsTo = msg.getRecipients();
+        List<RecipientEntry> recipentsCc = msg.getCcRecipients();
+        List<RecipientEntry> recipentsBcc = msg.getBccRecipients();
 
         //PrintWriter out = new PrintWriter("emails/processed/"+msgPath.split(".")[0]);
 

@@ -58,6 +58,52 @@ myApp.controller('DataController', function($scope,$http) {
         console.log("New Tab Selected: ");
         $scope.data = $scope.data_class1;
     };
+
+     $scope.autoExpand = function(e) {
+        var element = typeof e === 'object' ? e.target : document.getElementById(e);
+    		var scrollHeight = element.scrollHeight -60; // replace 60 by the sum of padding-top and padding-bottom
+        element.style.height =  scrollHeight + "px";
+    };
+
+      function expand() {
+        $scope.autoExpand('TextArea');
+  }
+
+  $scope.SubmitCensoredWords = function() {
+    console.log("Submitting Cenosred words..." );
+            $http({
+            method : 'POST',
+            url : '/censored/',
+            data : angular.copy({"message":"UPDATE_CENSORED_WORDS",
+                                 "words":$scope.censoredWords
+                                 })
+        });
+    console.log($scope.val_weight_taak)
+
+   };
+
+  $scope.ResetCensoredWords = function() {
+    console.log("Reset Cenosred words..." );
+            $http({
+            method : 'POST',
+            url : '/censored/',
+            data : angular.copy({"message":"RESET_CENSORED_WORDS"
+                                 })
+        });
+    };
+    $scope.RefreshList = function() {
+    console.log("Refresh List..." );
+            $http({
+            method : 'POST',
+            url : '/refresh/',
+            data : angular.copy({"message":"REFRESH_LIST"
+                                 })
+        });
+
+    console.log($scope.val_weight_taak)
+
+   };
+
 });
 
 myApp.controller('SliderController', SliderController);
@@ -113,7 +159,7 @@ function SliderController($scope,$http) {
                                   "model_name":$scope.current_model
                                  })
         });
-    console.log($scope.val_weight_taak)
+
 
    };
     $scope.updateDatabase = function() {
@@ -124,9 +170,19 @@ function SliderController($scope,$http) {
             data : angular.copy({"message":"UPDATE_DATABASE"
                                  })
         });
-    console.log($scope.val_weight_taak)
 
    };
+
+    $scope.updatePredictions = function() {
+    console.log("Updating the predictions..." );
+            $http({
+            method : 'POST',
+            url : '/update_predictions/',
+            data : angular.copy({"message":"UPDATE_PREDICTIONS",'model_name':$scope.current_model})
+        });
+
+   };
+
 
 
   $scope.change_model = function(current_model_choice) {

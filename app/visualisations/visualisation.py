@@ -30,6 +30,12 @@ JS_PATH_MODELS = '/static/Images/models_NA/'
 
 from machineLearning.config import PYTHON_PATH_USER_EMAIL_IMAGES,\
                                    tokenize
+
+from machineLearning.config import censor_name,\
+                                   load_censored_words,\
+                                   reset__censored_words,\
+                                   update_censored_words
+
 #--- LOCAL PATHS FOR CREATING/DELETING FIGURES FOR PYTHON CONTROLLER
 LOCALDIR = '/app'
 
@@ -252,7 +258,7 @@ def return_html_body(body, word_list, y_pred, top_n_words=15):
 
     tokens = new_tokens
     ###################################################################
-
+    censored_list = load_censored_words()
     for word in tokens:
         if word.lower() in word_color_dic.keys():
             html_body += ' ' + '<span style="font-size:' + str(word_color_dic[word.lower()]['size']) + '">' + \
@@ -289,8 +295,10 @@ def return_html_body(body, word_list, y_pred, top_n_words=15):
                         current_size_sentence += len(word) + 1
         if n_sentences >= max_sentences:
             html_body += ' ...'
-            return html_body
-    return html_body
+            return censor_name(html_body,censored_list)
+
+
+    return censor_name(html_body,censored_list)
 
 
 def create_feature_importance_email(name_model, word_list, extra_info, user, top_n_words=15):
@@ -299,6 +307,7 @@ def create_feature_importance_email(name_model, word_list, extra_info, user, top
     Multinomial Naive Bayes: rescaled plot of priors
     Trees: F-score
     """
+    censored_list = load_censored_words()
     def shorten_word(word,MAX_LEN=10):
         if len(word)>MAX_LEN:
             return word[:MAX_LEN]+'...'
@@ -313,12 +322,12 @@ def create_feature_importance_email(name_model, word_list, extra_info, user, top
         plt.subplot(1, 2, 1)
         plt.bar(np.arange(0, 3 * len(top_ham), 3), [min_score + score[1] for score in top_ham])
         plt.bar(np.arange(1, 3 * len(top_ham), 3), [min_score + score[2] for score in top_ham])
-        plt.xticks(np.arange(0, 3 * len(top_ham), 3) + 0.5, [shorten_word(score[0]) for score in top_ham], rotation=45)
+        plt.xticks(np.arange(0, 3 * len(top_ham), 3) + 0.5, [shorten_word(censor_name(score[0],censored_list) ) for score in top_ham], rotation=45)
         plt.title('TAAK')
         plt.subplot(1, 2, 2)
         plt.bar(np.arange(0, 3 * len(top_spam), 3), [min_score + score[1] for score in top_spam])
         plt.bar(np.arange(1, 3 * len(top_spam), 3), [min_score + score[2] for score in top_spam])
-        plt.xticks(np.arange(0, 3 * len(top_spam), 3) + 0.5, [shorten_word(score[0]) for score in top_spam], rotation=45)
+        plt.xticks(np.arange(0, 3 * len(top_spam), 3) + 0.5, [shorten_word(censor_name(score[0],censored_list) )  for score in top_spam], rotation=45)
         plt.title('NON_TAAK')
 
         plt.legend(['prob. ham', 'prob. spam'])
@@ -332,7 +341,7 @@ def create_feature_importance_email(name_model, word_list, extra_info, user, top
     elif (name_model == 'rf'):
         top_words = sorted(word_list, key=lambda x: (x[1]))[:-top_n_words - 1:-1]
         plt.bar(np.arange(0, len(top_words), 1), [score[1] for score in top_words])
-        plt.xticks(np.arange(0, len(top_words), 1), [shorten_word(score[0]) for score in top_words], rotation=45)
+        plt.xticks(np.arange(0, len(top_words), 1), [shorten_word(censor_name(score[0],censored_list) )  for score in top_words], rotation=45)
 
         path = PYTHON_PATH_USER_EMAIL_IMAGES  +user+'/feature_importance_email_NA/'+name_model + '/'
         file_name = 'efeature_imp_' + extra_info + '.png'
@@ -342,7 +351,7 @@ def create_feature_importance_email(name_model, word_list, extra_info, user, top
     elif (name_model == 'etr'):
         top_words = sorted(word_list, key=lambda x: (x[1]))[:-top_n_words - 1:-1]
         plt.bar(np.arange(0, len(top_words), 1), [score[1] for score in top_words])
-        plt.xticks(np.arange(0, len(top_words), 1), [shorten_word(score[0]) for score in top_words], rotation=45)
+        plt.xticks(np.arange(0, len(top_words), 1), [shorten_word(censor_name(score[0],censored_list) )  for score in top_words], rotation=45)
 
         path = PYTHON_PATH_USER_EMAIL_IMAGES +user+'/feature_importance_email_NA/'+name_model + '/'
         file_name = 'efeature_imp_' + extra_info + '.png'

@@ -18,6 +18,8 @@ PYTHON_PATH_USER_EMAIL_IMAGES = LOCALDIR+ '/static/Images/Emails/Users/'
 PYTHON_PATH_JSON_INFO_EMAIL_IMAGES = LOCALDIR + '/static/Images/Emails/Users/'
 PYTHON_FILENAME_JSON_INFO_EMAIL_IMAGES = 'json_email_data_NA.txt'
 
+PYTHON_PATH_JSON_CENSOR = LOCALDIR + '/static/Images/Emails/'
+PYTHON_FILENAME_JSON_CENSOR = 'json_censored.txt'
 
 def clean_dir(pathdir,extra_dir = ''):
     '''
@@ -59,3 +61,30 @@ def tokenize(text, stop, stemmer):
     tokens = list(filter(lambda x: len(x) > 2, tokens))
     # tokens = [stemmer.stem(word) for word in tokens]
     return tokens
+
+
+def censor_name(text,list_censored_words):
+    for name in list_censored_words:
+        text = text.replace(name, '***')
+    return text
+
+def load_censored_words():
+    with open(PYTHON_PATH_JSON_CENSOR + PYTHON_FILENAME_JSON_CENSOR, 'r') as outfile:
+        list_censored =  json.load(outfile)
+    return list_censored
+
+def reset__censored_words():
+    print('RESET CENSORED WORDS')
+    clean_file(PYTHON_PATH_JSON_CENSOR,PYTHON_FILENAME_JSON_CENSOR)
+    with open(PYTHON_PATH_JSON_CENSOR + PYTHON_FILENAME_JSON_CENSOR,'w') as outfile:
+        json.dump([], outfile)
+
+def update_censored_words(list_new_words):
+    old_list_censored = load_censored_words()
+    new_list = old_list_censored + list_new_words
+    with open(PYTHON_PATH_JSON_CENSOR + PYTHON_FILENAME_JSON_CENSOR,'w') as outfile:
+        json.dump(new_list, outfile)
+
+
+
+
