@@ -76,6 +76,8 @@ The automatic recalibration is a random grid-search with 10-iterations over 3 cr
 * Threshold: Shift the class choice with class_0 = (Score < threshold), class_1 = (Score >= threshold).
 ## License
 
+This project is licensed under ?????
+
 ## Acknowledgments
 
 * Dutch National Archive for initiating the project
