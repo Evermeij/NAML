@@ -69,9 +69,13 @@ In the Model-Board, the admin has been given a certain controle over the recalib
 <p align="center">
   <img src="/img/screenhost_admin.PNG"/>
 </p>
+
+
 The admin has the possibility to upload additional emails, update the database and update the target-predictions according the currently chosen model.
+
 Finally the admin has the possibility to explore the current performance of the models by retrainen the model manually or automatically.
 The automatic recalibration is a random grid-search with 10-iterations over 3 cross-validation folds over values of three types of hyperparameters: 
+
 * Weight Taak/Non-Taak: Due to presence of imbalance, the sample weight of each class is controlled with these hyperparameters
 * Threshold: Shift the class choice with class_0 = (Score < threshold), class_1 = (Score >= threshold).
 
