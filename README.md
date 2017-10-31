@@ -74,6 +74,8 @@ Finally the admin has the possibility to explore the current performance of the 
 The automatic recalibration is a random grid-search with 10-iterations over 3 cross-validation folds over values of three types of hyperparameters: 
 * Weight Taak/Non-Taak: Due to presence of imbalance, the sample weight of each class is controlled with these hyperparameters
 * Threshold: Shift the class choice with class_0 = (Score < threshold), class_1 = (Score >= threshold).
+
+
 ## License
 
 This project is licensed under ?????
