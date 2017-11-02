@@ -35,8 +35,8 @@ When running the app, the User first encounters a login.
 </p>
 
 At start, two users are created:
-* <to be described>
-* <to be described>
+* to be described
+* to be described
 
 The admin has the possibily to navigate to /signup and create new users.
 <p align="center">
